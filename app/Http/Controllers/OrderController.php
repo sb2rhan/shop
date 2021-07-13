@@ -20,8 +20,14 @@ class OrderController extends Controller
     function create() {
         $cart = $this->getCart();
 
+        $sum = 0;
+        $cart->each(function (Cart $cart) use(&$sum) {
+            $sum += $cart->product->calculate($cart->amount);
+        });
+
         return view('pages.orders.form', [
-            'cart' => $cart
+            'cart' => $cart,
+            'total' => $sum
         ]);
     }
 
@@ -33,6 +39,7 @@ class OrderController extends Controller
                 return [
                     'product_id' => $cart->product->id,
                     'amount' => $cart->amount,
+                    'price' => $cart->product->price,
                 ];
             });
 
@@ -58,6 +65,8 @@ class OrderController extends Controller
             return [
                 'amount' => $data['amount'],
                 'product' => $products->where('id', $data['product_id'])->first(),
+                'price' => $data['price'],
+                'total' => $data['price'] * $data['amount']
             ];
         });
 

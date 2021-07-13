@@ -12,6 +12,8 @@
                 <tr>
                     <th width="100%">{{ __('Name') }}</th>
                     <th>{{ __('Amount') }}</th>
+                    <th>{{ __('Price') }}</th>
+                    <th>{{ __('Total') }}</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -26,6 +28,12 @@
                             {{ $c->amount }}
                         </td>
                         <td>
+                            ${{ $c->product->calculate() }}
+                        </td>
+                        <td>
+                            ${{ $c->product->calculate($c->amount) }}
+                        </td>
+                        <td>
                             <form action="{{ route('cart.destroy', $c) }}" method="post">
                                 @csrf @method('delete')
                                 <button class="btn btn-sm btn-outline-danger border-0">
@@ -35,6 +43,11 @@
                         </td>
                     </tr>
                 @endforeach
+                <tr>
+                    <td colspan="3"></td>
+                    <td>${{ $total }}</td>
+                    <td></td>
+                </tr>
                 </tbody>
 
             </table>

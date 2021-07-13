@@ -18,10 +18,25 @@
 
     <div class="card my-3">
         <div class="card-header">
+            {{ __('Price') }}
+        </div>
+        <div class="card-body">
+            ${{ $product->calculate() }}
+        </div>
+    </div>
+
+    <div class="card my-3">
+        <div class="card-header">
             {{ __('Category') }}
         </div>
         <div class="card-body">
-            {{ $product->category->name ?? __('Without category') }}
+            @if($product->category)
+                <a href="{{ route('admin.categories.show', $product->category) }}">
+                    {{ $product->category->name }}
+                </a>
+            @else
+                {{ __('Without category') }}
+            @endif
         </div>
     </div>
 

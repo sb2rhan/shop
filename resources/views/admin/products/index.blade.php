@@ -17,29 +17,54 @@
     @else
 
         @foreach($products as $product)
-            <div class="card card-body my-3 d-flex flex-row align-items-center">
-                <div class="me-auto">
-                    {{ $product->name }}
-                    @if($product->category)
-                        <span class="badge bg-secondary">{{ $product->category->name }}</span>
-                    @endif
-                </div>
-                <form action="{{ route('admin.products.destroy', $product) }}" method="post">
-                    @csrf @method('delete')
+            <div class="card my-3">
 
-                    <div class="btn-group btn-group-sm">
-                        <a href="{{ route('admin.products.show', $product) }}" class="btn btn-primary">
-                            {{ __('View') }}
-                        </a>
-                        <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning">
-                            {{ __('Edit') }}
-                        </a>
+                <div class="card-body d-flex">
+                    <div>
+                        <div class="fw-bold card-title">
+                            {{ $product->name }}
+                        </div>
 
-                        <button class="btn btn-danger">
-                            {{ __('Delete') }}
-                        </button>
+                        {{ $product->description }}
                     </div>
-                </form>
+
+                    <div class="text-secondary fs-4 ms-auto">
+                        ${{ $product->calculate() }}
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex align-items-center">
+
+                    @if($product->category)
+                        <a class="me-2" href="{{ route('admin.categories.show', $product->category) }}">
+                            <span class="badge bg-secondary">
+                                {{ $product->category->name }}
+                            </span>
+                        </a>
+                    @endif
+
+                    <small class="text-secondary me-auto">
+                        {{ $product->created_at->diffForHumans() }}
+                    </small>
+
+                    <a href="{{ route('admin.products.show', $product) }}" class="btn btn-sm me-2 btn-primary">
+                        {{ __('View') }}
+                    </a>
+
+                    <form action="{{ route('admin.products.destroy', $product) }}" method="post">
+                        @csrf @method('delete')
+
+                        <div class="btn-group btn-group-sm me-2">
+                            <a href="{{ route('admin.products.edit', $product) }}" class="btn btn-warning">
+                                {{ __('Edit') }}
+                            </a>
+
+                            <button class="btn btn-danger">
+                                {{ __('Delete') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         @endforeach
 

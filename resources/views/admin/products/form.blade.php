@@ -46,6 +46,14 @@ $product = $product ?? null;
                     @enderror
                 </div>
 
+                <div class="mb-3">
+                    <label for="price" class="form-label">{{ __('Price for one') }}</label>
+                    <input class="form-control @error('price') is-invalid @enderror" value="{{ old('price', $product?->calculate()) }}" type="number" min="0.01" step="0.01" id="price" name="price">
+                    @error('price')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <div class="mb-4">
                     <label for="description" class="form-label">{{ __('Description') }}</label>
                     <textarea class="form-control @error('description') is-invalid @enderror "

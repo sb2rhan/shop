@@ -13,8 +13,14 @@ class CartController extends Controller
             ->latest()
             ->get();
 
+        $sum = 0;
+        $cart->each(function (Cart $cart) use(&$sum) {
+            $sum += $cart->product->calculate($cart->amount);
+        });
+
         return view('pages.cart.index', [
-            'cart' => $cart
+            'cart' => $cart,
+            'total' => $sum
         ]);
     }
 
