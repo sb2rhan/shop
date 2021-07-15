@@ -1,5 +1,7 @@
 <x-layouts.app :title="__('Order')">
-    <h1 class="h3 mb-3">{{ __('Order') }}</h1>
+    <h1 class="h3 mb-3">
+        {{ __('Order') }}
+    </h1>
 
     <div class="row">
 
@@ -36,8 +38,29 @@
 
         <div class="col-3">
             <div class="card card-body">
+                @if($order->is_approved)
+                    <div class="alert alert-success mb-3">
+                        {{ __('This order is approved!') }}
+                    </div>
+                @else
+                    <div class="alert alert-warning mb-3">
+                        {{ __('Waiting for approval...') }}
+                    </div>
+                @endif
                 <small class="text-secondary">{{ __('Address') }}</small>
                 <div>{{ $order->address }}</div>
+
+                @if(!$order->is_approved && (auth()->user()->hasRole('admin', 'manager')))
+
+                    <div class="mt-3">
+                        <form action="{{ route('admin.orders.approve', $order) }}" method="post">
+                            @csrf @method('put')
+                            <button class="btn btn-primary">
+                                {{ __('Approve') }}
+                            </button>
+                        </form>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

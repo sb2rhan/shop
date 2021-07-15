@@ -7,6 +7,7 @@ use App\Http\Requests\OrderRequest;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
+use App\Notifications\OrderCreated;
 use Illuminate\Database\Eloquent\Collection;
 
 class OrderController extends Controller
@@ -39,6 +40,7 @@ class OrderController extends Controller
                 return [
                     'product_id' => $cart->product->id,
                     'amount' => $cart->amount,
+                    'discount' => session()->get('discount'),
                     'price' => $cart->product->price,
                 ];
             });
@@ -49,6 +51,11 @@ class OrderController extends Controller
             ->orders()->create($data);
 
         auth()->user()->cart()->delete();
+
+        session()->remove('discount');
+
+        # notifying user
+        auth()->user()->notify(new OrderCreated($order));
 
         return redirect()->route('orders.show', $order);
     }
@@ -66,6 +73,7 @@ class OrderController extends Controller
                 'amount' => $data['amount'],
                 'product' => $products->where('id', $data['product_id'])->first(),
                 'price' => $data['price'],
+                'discount' => session()->get('discount'),
                 'total' => $data['price'] * $data['amount']
             ];
         });

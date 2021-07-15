@@ -1,11 +1,13 @@
-<x-layouts.app :title="__('Orders')">
+<x-layouts.app :title="__('Order')">
 
     <h1>
-        {{ __('Orders') }}
+        {{ __('Order') }}
     </h1>
 
     <div class="row">
+
         <div class="col-8">
+
             @foreach($cart as $c)
                 <div class="card my-3">
 
@@ -20,9 +22,8 @@
 
                         <div class="text-secondary fs-4 ms-auto d-flex align-items-center">
                             <span class="fs-6 me-2">
-                                ${{ $c->product->calculate() }} &times; {{ $c->amount }}
+                                ${{ $c->product->calculate() }} &times; {{ $c->amount }} &equals;
                             </span>
-
                             ${{ $c->product->calculate($c->amount) }}
                         </div>
                     </div>
@@ -30,7 +31,7 @@
                     <div class="card-footer d-flex align-items-center">
 
                         @if($c->product->category)
-                            <a class="me-2" href="{{ route('admin.categories.show', $c->product->category) }}">
+                            <a class="me-2" href="#">
                             <span class="badge bg-secondary">
                                 {{ $c->product->category->name }}
                             </span>
@@ -45,11 +46,13 @@
                             {{ __('View') }}
                         </a>
                     </div>
+
                 </div>
             @endforeach
+
         </div>
         <div class="col-4">
-            <form action="{{ route('orders.store') }}" method="post" class="card card-body">
+            <form action="{{ route('orders.store') }}" class="card card-body" method="post">
                 @csrf
 
                 <div class="mb-3">
@@ -60,19 +63,34 @@
                     @enderror
                 </div>
 
+                @if(session()->has('discount'))
+                <div class="mb-3 d-flex align-items-center justify-content-between">
+                    <small>
+                        {{ __('Discount') }}
+                    </small>
+
+                    <div class="fs-4">
+                        {{ session()->get('discount') * 100 }}%
+                    </div>
+                </div>
+                @endif
+
                 <div class="mb-3 alert alert-secondary d-flex align-items-center justify-content-between border-0 py-2">
                     <small>
-                        {{ __('Total') }}:
+                        {{__('Total')}}:
                     </small>
                     <div class="fs-4">
-                        ${{ $total }}
+                        ${{$total * (1 - session()->get('discount'))}}
                     </div>
                 </div>
 
                 <button class="btn btn-primary">
                     {{ __('Order') }}
                 </button>
+
             </form>
         </div>
+
     </div>
+
 </x-layouts.app>

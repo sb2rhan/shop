@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'address', 'products'
+        'address', 'products', 'is_approved'
     ];
 
     protected $casts = [
-        'products' => 'json' #from array to json
+        'products' => 'json', #from array to json
+        'is_approved' => 'boolean'
     ];
 
     function user() {

@@ -17,6 +17,9 @@ Route::middleware('auth')
         Route::get('/', [CartController::class, 'index'])
             ->name('index');
 
+        Route::post('promocode', [CartController::class, 'applyPromocode'])
+            ->name('promocode');
+
         Route::post('{product}', [CartController::class, 'store'])
             ->name('store');
 

@@ -5,12 +5,23 @@
         <x-partials.navbar.link href="{{ route('admin.dashboard') }}">
             {{__('Dashboard')}}
         </x-partials.navbar.link>
+
         <x-partials.navbar.link href="{{ route('admin.categories.index') }}">
             {{__('Categories')}}
         </x-partials.navbar.link>
+
         <x-partials.navbar.link href="{{ route('admin.products.index') }}">
             {{__('Products')}}
         </x-partials.navbar.link>
+
+        <x-partials.navbar.link href="{{ route('admin.orders.index') }}">
+            {{__('Orders')}}
+        </x-partials.navbar.link>
+
+        <x-partials.navbar.link href="{{ route('admin.promocodes.index') }}">
+            {{__('Promocodes')}}
+        </x-partials.navbar.link>
+
     </x-partials.navbar>
 
     <div class="container mt-3">

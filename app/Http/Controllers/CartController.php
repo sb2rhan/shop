@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CartPromocodeRequest;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Promocode;
 
 class CartController extends Controller
 {
@@ -39,6 +41,18 @@ class CartController extends Controller
 
     function destroy(Cart $cart) {
         $cart->delete();
+        return back();
+    }
+
+    function applyPromocode(CartPromocodeRequest $request) {
+        if (session()->has('discount'))
+            abort(403);
+
+        $promocode = Promocode::query()
+            ->where('code', $request->code)
+            ->first();
+
+        session()->put('discount', $promocode->discount / 100);
         return back();
     }
 }
